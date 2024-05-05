@@ -11,7 +11,7 @@ export const POST = async (req: Request) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      client: id.toString(),
+      client: `${id}`,
       data: [
         {
           Email: email,
