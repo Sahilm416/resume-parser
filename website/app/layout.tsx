@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className + " flex flex-col items-center overflow-hidden"}>
         <Navbar/>
-        <div className="max-w-[1300px] w-full px-10 border-x">
+        <div className="max-w-[1300px] w-full border-x">
          {children} 
         </div>
         <Toaster/>

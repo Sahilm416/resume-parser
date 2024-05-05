@@ -1,7 +1,7 @@
 import Login from "@/components/auth/SignIn"
 const page = () => {
   return (
-    <div>
+    <div className="px-10">
         <Login/>
     </div>
   )
