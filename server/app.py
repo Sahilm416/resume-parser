@@ -27,12 +27,12 @@ def upsert_data(requestData: Dict):
         
     index = Index(url=URL, token=Token)
     for data in data_list:
-        application_id = data.get("applicationId", "")
+        Email = data.get("Email", "")
         content = data.get("content", "")
-        information=f"{client_id}{application_id}{content}"
+        information=f"{client_id}{current_application_id}{content}"
         index.upsert(
             vectors=[
-                    (f"{client_id}_{current_application_id}", information, {"clientID": client_id, "applicationId": current_application_id, "content": content}),
+                    (f"{client_id}_{current_application_id}", information, {"clientID": client_id, "Email": Email, "content": content}),
                 ]
             )
         application_id_dict[client_id] += 1
@@ -69,7 +69,7 @@ class Model:
         info=[]
         for chunk in result:
             if chunk.metadata.get("clientID") == client:
-                temp={"Application_id":chunk.metadata.get("applicationId"),"Score":chunk.score,"Content":chunk.metadata.get("content")}
+                temp={"Email":chunk.metadata.get("Email"),"Content":chunk.metadata.get("content"),"Score":chunk.score}
                 info.append(temp)
         if not info:
             return {"result":"NO data found"}
