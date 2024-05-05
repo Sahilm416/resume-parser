@@ -1,3 +1,4 @@
+
 from modal import Stub, build, enter, method, web_endpoint,Image
 from typing import Dict
 import os
@@ -66,3 +67,4 @@ class Model:
             return {"result":"NO data found"}
             
         return {"result":info}
+

@@ -1,4 +1,5 @@
+bs4
+spacy
 fastapi== 0.109.0
 fastapi-socketio==0.0.10
 uvicorn== 0.25.0
-upstash_vector==0.3.1
