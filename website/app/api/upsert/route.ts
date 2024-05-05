@@ -4,7 +4,7 @@ export const runtime = "edge";
 
 export const POST = async (req: Request) => {
   const { email, resume, id } = await req.json();
-  console.log(email , id)
+  console.log(email , id , process.env.MODAL_UPSERT!)
   let res = await fetch(process.env.MODAL_UPSERT!, {
     method: "POST",
     headers: {

@@ -77,58 +77,58 @@ export const applyToJob = async ({
   }
 };
 
-export const upsertApplications = async ({
-  email,
-  resume,
-  id,
-}: {
-  email: string;
-  resume: string;
-  id: number;
-}) => {
+// export const upsertApplications = async ({
+//   email,
+//   resume,
+//   id,
+// }: {
+//   email: string;
+//   resume: string;
+//   id: number;
+// }) => {
 
-  // const strId = id.toString();
+//   // const strId = id.toString();
 
-  // console.log(strId , typeof(strId))
-  let res = await fetch(process.env.MODAL_UPSERT!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      client: id.toString(),
-      data: [
-        {
-          Email: email,
-          content: resume,
-        },
-      ],
-    }),
-  });
+//   // console.log(strId , typeof(strId))
+//   let res = await fetch(process.env.MODAL_UPSERT!, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       client: id.toString(),
+//       data: [
+//         {
+//           Email: email,
+//           content: resume,
+//         },
+//       ],
+//     }),
+//   });
 
-  // console.log(res)
+//   // console.log(res)
 
-  const response = await res.json();
-  // console.log(response);
-};
+//   const response = await res.json();
+//   // console.log(response);
+// };
 
 
 
-export const matchApplication = async ({id, description}:{id:number,description: string})=>{
-   const res = await fetch(process.env.MODAL_MATCH!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      client: id.toString(),
-      data: description
-    })
-   })
+// export const matchApplication = async ({id, description}:{id:number,description: string})=>{
+//    const res = await fetch(process.env.MODAL_MATCH!, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       client: id.toString(),
+//       data: description
+//     })
+//    })
 
-   const response = await res.json();
+//    const response = await res.json();
 
-   console.log(response)
+//    console.log(response)
 
-   return response.result;
-}
+//    return response.result;
+// }
