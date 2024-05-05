@@ -1,6 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogClose, DialogFooter } from "../ui/dialog";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogClose,
+  DialogFooter,
+} from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "../ui/button";
 import { DialogDescription } from "@radix-ui/react-dialog";
@@ -24,7 +32,8 @@ const Job = ({
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [loadingMessage, setLoadingMessage] = useState<string>("Analyzing resumes");
+  const [loadingMessage, setLoadingMessage] =
+    useState<string>("Analyzing resumes");
   const [rankedResume, setRankedResume] = useState<
     { Email: string; Content: string; Score: number }[]
   >([]);
@@ -52,18 +61,38 @@ const Job = ({
       let parser = new DOMParser();
       let doc = parser.parseFromString(obj.resume, "text/html");
       let text = doc.body.textContent as string;
-      await upsertApplications({ email: obj.email, resume: text, id: job.id });
+      await fetch("/api/upsert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: obj.email, resume: text, id: job.id }),
+      });
     }
     await fakeLoad();
     setLoadingMessage("Ranking resumes");
-    const res = await matchApplication({ id: job.id, description: job.description });
+    const res = await fetch("/api/match",{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }, 
+      body: JSON.stringify({
+        id: job.id,
+        description: job.description,
+      })
+    });
+
+    const response = await res.json();
     setLoading(false);
 
     // Store the content of each resume along with email and score
     //@ts-ignore
-    const rankedResumesWithContent = res.map((resume) => ({
+    const rankedResumesWithContent = response.data.map((resume) => ({
       Email: resume.Email,
-      Content: job.applicants.data.find((applicant) => applicant.email === resume.Email)?.resume || "",
+      Content:
+        job.applicants.data.find(
+          (applicant) => applicant.email === resume.Email
+        )?.resume || "",
       Score: resume.Score,
     }));
 
@@ -81,14 +110,19 @@ const Job = ({
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Are you sure ?</DialogTitle>
-              <DialogDescription>This action can't be undone.</DialogDescription>
+              <DialogDescription>
+                This action can't be undone.
+              </DialogDescription>
             </DialogHeader>
             <p>
               It'll delete all the data related to{" "}
-              <span className=" font-semibold">{job.title}</span> listing from our server.{" "}
+              <span className=" font-semibold">{job.title}</span> listing from
+              our server.{" "}
             </p>
             <DialogFooter>
-              <DialogClose className="p-2 rounded-sm border w-[120px]">cancel</DialogClose>
+              <DialogClose className="p-2 rounded-sm border w-[120px]">
+                cancel
+              </DialogClose>
               <DialogClose
                 onClick={handleDelete}
                 className="bg-red-500 p-2 w-[150px] border rounded-sm text-white"
@@ -109,7 +143,10 @@ const Job = ({
               Resume Parser</h1>
             </div>
         </div> */}
-        <Tabs defaultValue="all" className="w-full max-w-[1200px] overflow-y-auto">
+        <Tabs
+          defaultValue="all"
+          className="w-full max-w-[1200px] overflow-y-auto"
+        >
           <TabsList className="w-full">
             <TabsTrigger onClick={handleTop} className="w-full" value="top">
               Top Applications
@@ -138,7 +175,9 @@ const Job = ({
                         view
                       </DialogTrigger>
                       <DialogContent className="max-w-[800px] h-auto max-h-[600px] overflow-y-auto">
-                        <div dangerouslySetInnerHTML={{ __html: resume.Content }} />
+                        <div
+                          dangerouslySetInnerHTML={{ __html: resume.Content }}
+                        />
                       </DialogContent>
                     </Dialog>
                   </div>
