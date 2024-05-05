@@ -177,7 +177,7 @@ export default function SignUpCompany() {
                 className="w-full bg-green-500 text-white hover:bg-green-600"
               >
                 {loading ? (
-                  <Loader2 className=" animate-spin" />
+                  <Loader2 className=" animate-spin duration-300" />
                 ) : (
                   "Create an account"
                 )}
