@@ -15,6 +15,11 @@ Token = os.getenv("Token")
 
 index = Index(url=URL, token=Token)
 
+
+@app.get("/")
+def home():
+    return {"message": "Backend working..."}
+
 @app.post("/upsert/")
 async def upsert_data(requestData: Dict):
     try:
