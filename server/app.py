@@ -18,26 +18,27 @@ index = Index(url=URL, token=Token)
 @app.post("/upsert/")
 async def upsert_data(requestData: Dict):
     try:
-        data = requestData["data"]  
-        clientId = requestData["client"]
-        applicationId = data.get("applicationId", "")
-        content = data.get("content", "")
-        index.upsert(
-            vectors=[
-                ("id1", content, {"clientID": clientId, "applicationId": applicationId, "content": content}),
-            ]
-        )
+        data_list = requestData["data"]
+        client_id = requestData["client"]
+        for data in data_list:
+            application_id = data.get("applicationId", "")
+            content = data.get("content", "")
+            index.upsert(
+                vectors=[
+                    (f"{client_id}_{application_id}", content, {"clientID": client_id, "applicationId": application_id, "content": content}),
+                ]
+            )
         return {"message": "Data upserted successfully"}
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"Missing required key: {e}")
-    except ValueError as e:
-        raise HTTPException(status_code=400, detail=f"Invalid data format: {e}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/query/")
 async def query_data(requestData: Dict):
     try:
+        client=requestData["client"]
         data = requestData["data"]
         result = index.query(
             data=data,
@@ -45,9 +46,15 @@ async def query_data(requestData: Dict):
             include_vectors=False,
             include_metadata=True
         )
-        content = result[0]
-        content = content.metadata.get('content')
-        return {"content": content}
+        
+        info=[]
+        for chunk in result:
+            if chunk.metadata.get("clientID") == client:
+                temp={"Application_id":chunk.metadata.get("applicationId"),"Score":chunk.score,"Content":chunk.metadata.get("content")}
+            else:
+                return {"result":"NO data found"}
+            info.append(temp)
+        return {"result":info}
     except KeyError as e:
         raise HTTPException(status_code=400, detail=f"Missing required key: {e}")
     except Exception as e:
