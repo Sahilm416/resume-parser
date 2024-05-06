@@ -51,6 +51,12 @@ export default function SignUpCompany() {
     const lname = formData.get("last-name") as string;
     const company = formData.get("company") as string;
 
+    // Check if password meets the minimum length requirement
+    if (password.length < 6) {
+        toast.error("Password must be at least 6 characters long");
+        return; // Stop execution if password is invalid
+    }
+
     await fakeLoad();
     setLoading(true);
     const res = await checkSignUpEmail({
@@ -67,10 +73,9 @@ export default function SignUpCompany() {
       setUser({ email: email, password: password, fname: fname, lname: lname , company: company });
     }
 
-    // setDialog(true);
-
     setLoading(false);
-  };
+};
+
 
   const handleVerification = async (code: string) => {
     setLoading(true);

@@ -16,7 +16,7 @@ const page = async () => {
       <div className="sticky top-0 border-b px-10 pb-5 bg-white/10 backdrop-blur-md">
         <h1 className="text-3xl font-semibold">All job postings</h1>
       </div>
-      <div className="px-10 py-5 flex justify-center overflow-y-scroll">
+      <div className="px-10 py-5 h-full flex justify-center overflow-y-scroll">
         <AllJobs jobs={jobs} />
       </div>
     </div>

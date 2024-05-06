@@ -14,9 +14,9 @@ const Header = () => {
           <Link href={'/signin'} className="p-3 w-[150px] text-center bg-green-500 rounded-full text-white">
             get started
           </Link>
-          <button className="p-3 w-[150px] border border-green-500 rounded-full text-green-500 bg-green-50">
+          <Link href={'/about'} className="p-3 text-center w-[150px] border border-green-500 rounded-full text-green-500 bg-green-50">
             learn more
-          </button>
+          </Link>
         </div>
       </div>
       <div className="pt-[100px] ">

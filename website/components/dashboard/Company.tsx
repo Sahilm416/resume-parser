@@ -93,7 +93,7 @@ const Company = ({
         <h1 className="text-3xl font-semibold">
           {data.company}{" "}
           <span className=" text-base text-zinc-700 ml-5 ">
-            (via {data.fname} {data.lname} {data.email})
+            (by {data.fname} {data.lname})
           </span>
         </h1>
         <Dialog>

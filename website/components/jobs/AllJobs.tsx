@@ -28,7 +28,7 @@ const AllJobs = ({
       {
         jobs.map((job,i)=> {
           return (
-            <div className='p-5 border border-green-500 bg-zinc-100 rounded-md w-[500px] space-y-2' key={i}>
+            <div className='p-5 border border-green-500 bg-zinc-100 rounded-md w-[500px] h-[200px] space-y-2' key={i}>
               <p className='text-2xl font-bold'>{job.title}</p>
               <p className='text-green-500 font-semibold'>{job.posted_by.company}</p>
               <p>{job.description.slice(0,30)+"..."} <span className='text-blue-600'>more</span></p>
