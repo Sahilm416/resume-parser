@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { OpenAI } from "openai";
-
+export const runtime = "edge";
 const instructions =
   "You are an ai that converts the given string resume into an HTML document. You dont respond a single word or character than the HTML resume you keep the Format of the returned HTML consistant for all the requests. You dont give HTML from html tag or body tag or head tag. You only give the presentation of given string into HTML string. Keep that in mind that your whole response is gonna embedded as html in website. Also add inline styles to prsent it more professionally.It should look like a proper resume. Style for allignment and good looking as this is gonna be presented in front of rcrutement team";
 export async function POST(req: Request) {
