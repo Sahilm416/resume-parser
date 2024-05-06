@@ -71,15 +71,15 @@ const Job = ({
     }
     await fakeLoad();
     setLoadingMessage("Ranking resumes");
-    const res = await fetch("/api/match",{
+    const res = await fetch("/api/match", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
-      }, 
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         id: job.id,
         description: job.description,
-      })
+      }),
     });
 
     const response = await res.json();
@@ -87,16 +87,23 @@ const Job = ({
 
     // Store the content of each resume along with email and score
     //@ts-ignore
-    const rankedResumesWithContent = response.data.map((resume) => ({
-      Email: resume.Email,
-      Content:
-        job.applicants.data.find(
-          (applicant) => applicant.email === resume.Email
-        )?.resume || "",
-      Score: resume.Score,
-    }));
-
-    setRankedResume(rankedResumesWithContent.slice(0, 5)); // Limit to top 5 resumes
+    const rankedResumesWithContent:
+      | { Email: string; Content: string; Score: number }[]
+      | undefined = Array.isArray(response?.data)
+      ? response.data
+          .map((resume: { Email: string; Score: number }) => ({
+            Email: resume.Email,
+            Content:
+              job.applicants.data.find(
+                (applicant: { email: string }) =>
+                  applicant.email === resume.Email
+              )?.resume || "",
+            Score: resume.Score,
+          }))
+          .slice(0, 5)
+      : undefined;
+     //@ts-ignore
+    setRankedResume(rankedResumesWithContent); // Limit to top 5 resumes
   };
 
   return (
@@ -163,25 +170,29 @@ const Job = ({
               </div>
             ) : (
               <div>
-                {rankedResume.map((resume, index) => (
-                  <div
-                    key={index}
-                    className="p-3 my-2 rounded-md border border-blue-500 bg-blue-50 flex items-center justify-between"
-                  >
-                    <p className="w-[250px]">{resume.Email}</p>
-                    <p>{resume.Score.toFixed(2)} %</p>
-                    <Dialog>
-                      <DialogTrigger className="p-2 border bg-blue-500 hover:bg-blue-600 text-white rounded-md w-[120px]">
-                        view
-                      </DialogTrigger>
-                      <DialogContent className="max-w-[800px] h-auto max-h-[600px] overflow-y-auto">
-                        <div
-                          dangerouslySetInnerHTML={{ __html: resume.Content }}
-                        />
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                ))}
+                {Array.isArray(rankedResume) && rankedResume.length > 0 ? (
+                  rankedResume.map((resume, index) => (
+                    <div
+                      key={index}
+                      className="p-3 my-2 rounded-md border border-blue-500 bg-blue-50 flex items-center justify-between"
+                    >
+                      <p className="w-[250px]">{resume.Email}</p>
+                      <p>{resume.Score.toFixed(2)} %</p>
+                      <Dialog>
+                        <DialogTrigger className="p-2 border bg-blue-500 hover:bg-blue-600 text-white rounded-md w-[120px]">
+                          view
+                        </DialogTrigger>
+                        <DialogContent className="max-w-[800px] h-auto max-h-[600px] overflow-y-auto">
+                          <div
+                            dangerouslySetInnerHTML={{ __html: resume.Content }}
+                          />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center p-5">NO data found</p>
+                )}
               </div>
             )}
           </TabsContent>

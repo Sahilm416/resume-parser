@@ -18,7 +18,7 @@ export const POST = async (req: Request) => {
 
   const response = await res.json();
 
-//   console.log(response);
+  console.log(response);
 
   return NextResponse.json(
     {
