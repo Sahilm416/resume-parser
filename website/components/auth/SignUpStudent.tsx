@@ -48,7 +48,11 @@ export default function SignUpStudent() {
     const password = formData.get("password") as string;
     const fname = formData.get("first-name") as string;
     const lname = formData.get("last-name") as string;
-
+    // Check if password meets the minimum length requirement
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long");
+      return; // Stop execution if password is invalid
+    }
     await fakeLoad();
     setLoading(true);
     const res = await checkSignUpEmail({
@@ -76,7 +80,6 @@ export default function SignUpStudent() {
       loading: "Veifying verification code...",
       success: (res) => {
         if (res.status) {
- 
           toast.promise(
             createNewAccount({
               email: user.email,
@@ -97,7 +100,7 @@ export default function SignUpStudent() {
               },
               error: (err) => {
                 return "Error creating account";
-              }
+              },
             }
           );
 
@@ -107,7 +110,7 @@ export default function SignUpStudent() {
       },
       error: (err) => {
         return "Email verification failed";
-      }
+      },
     });
     setLoading(false);
   };

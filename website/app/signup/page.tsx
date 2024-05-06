@@ -11,7 +11,7 @@ const Page = () => {
   };
 
   return (
-    <div className="w-full h-[calc(100vh-60px)] py-12 flex justify-between">
+    <div className="w-full h-[calc(100vh-60px)] py-12 px-10 flex justify-between">
       <div className="w-full flex flex-col gap-5">
         <h1 className='text-3xl font-bold'>Select your account type</h1>
         <label className={`p-10 rounded-xl border cursor-pointer ${selectedTab === 'student' ? 'bg-green-500 border-green-500 text-white' : 'bg-green-50 border-green-500'}`} onClick={() => handleTabChange('student')}>

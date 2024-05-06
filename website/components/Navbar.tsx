@@ -18,10 +18,10 @@ const Navbar = async () => {
           <Link className="hover:text-green-500 hover:underline" href={"/"}>
             home
           </Link>
-          <Link className="hover:text-green-500 hover:underline" href={"/"}>
+          <Link className="hover:text-green-500 hover:underline" href={"/about"}>
             about
           </Link>
-          <Link className="hover:text-green-500 hover:underline" href={"/"}>
+          <Link className="hover:text-green-500 hover:underline" href={"mailto:sahilmulani501@gmail.com"}>
             contact
           </Link>
 
