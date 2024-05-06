@@ -21,15 +21,23 @@ const PdfReader = ({ file, id }: { file: File; id: number }) => {
         const { data } = await getSession();
         if (data) {
           setLoading(true);
-          const res = await applyToJob({
-            email: data.email,
-            resume: extractedText,
-            id: id,
+          const res = await fetch("/api/apply", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: data.email,
+              resume: extractedText,
+              id: id,
+            })
           });
-          if (res.success) {
-            toast.success(res.message);
+
+          const response = await res.json();
+          if (response.success) {
+            toast.success(response.message);
           } else {
-            toast.error(res.message);
+            toast.error(response.message);
           }
           console.log("Applied successfully!");
         } else {
