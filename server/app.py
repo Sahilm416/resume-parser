@@ -31,10 +31,9 @@ def upsert_data(requestData: Dict):
     for data in data_list:
         Email = data.get("Email", "")
         content = data.get("content", "")
-        information=f"{client_id}{app_id}{content}"
         index.upsert(
             vectors=[
-                    (f"{client_id}_{app_id}", information, {"clientID": client_id, "Email": Email, "content": content}),
+                    (f"{client_id}_{app_id}", content, {"clientID": client_id, "Email": Email, "content": content}),
                 ]
             )
         application_id_dict[client_id] += 1
@@ -61,7 +60,6 @@ class Model:
     @method()
     def query_data(self,client:str,data:str):
         filter = f"clientID = '{client}'" 
-        data=f"{client}{data}"
         result = self.index.query(
             data=data,
             filter=filter,
