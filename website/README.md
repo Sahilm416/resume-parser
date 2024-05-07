@@ -1,4 +1,4 @@
-# Professional Resume Parser
+# Resume Parser
 
 ## Overview
 The Resume Parser is a sophisticated tool designed to streamline the process of extracting and organizing key information from resumes. This application simplifies the creation of polished and professional resumes, saving time and ensuring a structured presentation of your qualifications.
