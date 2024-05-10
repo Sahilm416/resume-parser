@@ -7,6 +7,7 @@ import { applyToJob } from "@/actions/jobs";
 import { getSession } from "@/actions/auth";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { getCurrentUser } from "@/actions/dashboard";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
@@ -17,10 +18,19 @@ const PdfReader = ({ file, id }: { file: File; id: number }) => {
   const handleApply = async () => {
     try {
       const extractedText = await extractTextFromFile(file);
+      const checkText = extractedText as string;
+     
       if (extractedText) {
-        const { data } = await getSession();
+    
+        const data = await getCurrentUser();
+        console.log(data)
         if (data) {
           setLoading(true);
+          if(!(checkText?.toLowerCase()).includes(data.fname.toLowerCase()) && !(checkText?.toLowerCase()).includes(data.lname.toLowerCase())) {
+            setLoading(false);
+            toast.error("Name in resume not matching")
+            return;
+          }
           const res = await fetch("/api/apply", {
             method: "POST",
             headers: {
