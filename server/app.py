@@ -4,7 +4,8 @@ import os
 import modal
 application_id_dict={}
 image = Image.debian_slim().pip_install(
-    "upstash_vector"
+    "upstash_vector",
+    "nltk"
 
 )
 stub = Stub(name="resume-parser", image=image)
@@ -13,6 +14,8 @@ stub = Stub(name="resume-parser", image=image)
 @web_endpoint(label="upsert",method="POST")
 def upsert_data(requestData: Dict):
     from upstash_vector import Index
+    from nltk.corpus import stopwords
+    from collections import Counter
     data_list = requestData["data"]
     client_id = requestData["client"]
         
@@ -31,9 +34,30 @@ def upsert_data(requestData: Dict):
     for data in data_list:
         Email = data.get("Email", "")
         content = data.get("content", "")
+        tokens = nltk.word_tokenize(content)
+    
+    # Remove stop words and punctuation
+        stop_words = set(stopwords.words('english'))
+        filtered_tokens = [token for token in tokens if token.lower() not in stop_words and token.isalnum()]
+    
+    # Perform part-of-speech tagging
+        tagged_tokens = nltk.pos_tag(filtered_tokens)
+    
+    # Select relevant parts of speech (e.g., nouns and adjectives)
+        relevant_tags = ['NN', 'NNS', 'NNP', 'NNPS', 'JJ']
+        relevant_tokens = [token for token, tag in tagged_tokens if tag in relevant_tags]
+    
+    # Calculate word frequencies
+        word_freq = Counter(relevant_tokens)
+    
+    # Select the most frequent words as keywords
+        keywords = [word for word, freq in word_freq.most_common(200)]
+    
+        # Join the keywords into a string
+        keyword_string = ', '.join(keywords)
         index.upsert(
             vectors=[
-                    (f"{client_id}_{app_id}", content, {"clientID": client_id, "Email": Email, "content": content}),
+                    (f"{client_id}_{app_id}", keyword_string, {"clientID": client_id, "Email": Email, "content": content}),
                 ]
             )
         application_id_dict[client_id] += 1
